@@ -4,11 +4,11 @@ const fs = require("fs"); // Use require instead of import
 const app = express();
 const https = require('https');
 const cors = require('cors');
-const options = {
-  key: fs.readFileSync('key.pem'),     // Path to your SSL private key file
-  cert: fs.readFileSync('cert.pem')    // Path to your SSL certificate file
-};
-const server = https.createServer(options, app);
+// const options = {
+//   key: fs.readFileSync('key.pem'),     // Path to your SSL private key file
+//   cert: fs.readFileSync('cert.pem')    // Path to your SSL certificate file
+// };
+const server = https.createServer(app);
 const { Server } = require("socket.io");
 // const io = new Server(server);
 const io = new Server(server, {
