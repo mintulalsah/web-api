@@ -1,10 +1,21 @@
 const express = require('express');
 var bodyParser = require('body-parser');
+const fs = require("fs"); // Use require instead of import
 const app = express();
-const http = require('http');
-const server = http.createServer(app);
+const https = require('https');
+const cors = require('cors');
+const options = {
+  key: fs.readFileSync('key.pem'),     // Path to your SSL private key file
+  cert: fs.readFileSync('cert.pem')    // Path to your SSL certificate file
+};
+const server = https.createServer(options, app);
 const { Server } = require("socket.io");
-const io = new Server(server);
+// const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: '*'
+  }
+});
 const port = process.env.PORT || 3000;
 
 const routes = require('./src/user/routes')
@@ -12,7 +23,10 @@ require('./src/config/database')
 
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(express.json())
-
+// app.use(cors({
+//   origin: '*'
+// }));
+app.use(cors()); // Enable CORS for all routes
 app.use('/routes', routes)
 
 io.on('connection', (socket) => {
