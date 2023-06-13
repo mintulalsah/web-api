@@ -36,7 +36,7 @@ router.use((req, res, next) => {
 router.get('/', async (req, res) => {
   try {
     //console.log("controller response",req.body)
-    users.find((err, docs) => {
+    grouptwos.find((err, docs) => {
       res.send(docs.reverse())
     }).sort({ $natural: -1 }).limit(20)
   } catch (error) {
@@ -133,7 +133,7 @@ router.get('/groups', async (req, res) => {
 // define the about route
 router.post('/', async (req, res) => {
   try {
-    let response = await users.create(req.body)
+    let response = await grouptwos.create(req.body)
     let movielink = null;
     let message = 'success';
     if (!req.body.isadmin) {
