@@ -1,5 +1,5 @@
 const express = require('express')
-const { users, admin, alllists, listofgroups, groupones, grouptwos, groupthrees, grouponebusers, groupthreebusers, grouptwobusers } = require('../models');
+const { users, admin, alllists, listofgroups, groupones, grouptwos, groupthrees, grouponebusers, groupthreebusers, grouptwobusers, weblists } = require('../models');
 const { loaduser } = require('../../user_model');
 const { CheckBlockeduser } = require('../CheckBlockeduser');
 const groups = require('../models/groups/groups');
@@ -139,7 +139,7 @@ router.post('/', async (req, res) => {
     if (!req.body.isadmin) {
       //console.log('chekcing');
       // checking user movie name exact match in document or not
-      let requestdoc = await admin.findOne({ mnm: req.body.mnm.toLowerCase().trim() });
+      let requestdoc = await weblists.findOne({ mnm: req.body.mnm.toLowerCase().trim() });
       var found = false;
       if (requestdoc != null) {
         //console.log('found if 0' + requestdoc);
@@ -156,7 +156,7 @@ router.post('/', async (req, res) => {
       // checking user moview name exist in document string(example if mnm is "love" and if in documemt mnm is love 2023 it will return true)
      // console.log("still checking 1")
       if (!found) {
-        requestdoc = await admin.findOne({ mnm: { '$regex': req.body.mnm.toLowerCase().trim(), '$options': 'i' } });
+        requestdoc = await weblists.findOne({ mnm: { '$regex': req.body.mnm.toLowerCase().trim(), '$options': 'i' } });
         if (requestdoc != null) {
           //console.log('found if 1' + requestdoc);
           found = !found;
@@ -171,27 +171,27 @@ router.post('/', async (req, res) => {
         }
       }
       //console.log("still checking contain logic")
-      if (!found) {
-        // Read users.json file
-        let alldata=loaduser();
-          var m = 0;
-          for (m = 0; m < alldata.length; m++) {
-            if (search_word(req.body.mnm.toLowerCase().trim(), alldata[m].mnm.toLowerCase())) {
-              //console.log('found 1 contain'+alldata[m].url);
-              found = !found;
-              movielink = alldata[m].url;
-              let message = 'success';
-              res.send({
-                sucess: true,
-                message: message,
-                isfound: movielink != null ? true : false,
-                mlink: movielink != null ? movielink : ''
-              })
-              break;
-            }
-          }
+      // if (!found) {
+      //   // Read users.json file
+      //   let alldata=loaduser();
+      //     var m = 0;
+      //     for (m = 0; m < alldata.length; m++) {
+      //       if (search_word(req.body.mnm.toLowerCase().trim(), alldata[m].mnm.toLowerCase())) {
+      //         //console.log('found 1 contain'+alldata[m].url);
+      //         found = !found;
+      //         movielink = alldata[m].url;
+      //         let message = 'success';
+      //         res.send({
+      //           sucess: true,
+      //           message: message,
+      //           isfound: movielink != null ? true : false,
+      //           mlink: movielink != null ? movielink : ''
+      //         })
+      //         break;
+      //       }
+      //     }
       
-      }
+      // }
       //console.log("still checking 2")
       if (!found) {
         let s = req.body.mnm.toLowerCase().trim();
@@ -201,7 +201,7 @@ router.post('/', async (req, res) => {
             ""
           );
           const re = RegExp(p);
-          requestdoc = await alllists.findOne({ mnm: { '$regex': re, '$options': 'i' } });
+          requestdoc = await weblists.findOne({ mnm: { '$regex': re, '$options': 'i' } });
           if (requestdoc != null) {
            // console.log('found if 2' + requestdoc);
             found = !found;
