@@ -171,51 +171,28 @@ router.post('/', async (req, res) => {
         }
       }
       //console.log("still checking contain logic")
-      // if (!found) {
-      //   // Read users.json file
-      //   let alldata=loaduser();
-      //     var m = 0;
-      //     for (m = 0; m < alldata.length; m++) {
-      //       if (search_word(req.body.mnm.toLowerCase().trim(), alldata[m].mnm.toLowerCase())) {
-      //         //console.log('found 1 contain'+alldata[m].url);
-      //         found = !found;
-      //         movielink = alldata[m].url;
-      //         let message = 'success';
-      //         res.send({
-      //           sucess: true,
-      //           message: message,
-      //           isfound: movielink != null ? true : false,
-      //           mlink: movielink != null ? movielink : ''
-      //         })
-      //         break;
-      //       }
-      //     }
-      
-      // }
-      //console.log("still checking 2")
       if (!found) {
-        let s = req.body.mnm.toLowerCase().trim();
-        if (!(s === null) && s.length >= 5) {
-          const p = Array.from(s).reduce(
-            (a, v, i) => `${a}[^${s.substr(i)}]*?${v}`,
-            ""
-          );
-          const re = RegExp(p);
-          requestdoc = await weblists.findOne({ mnm: { '$regex': re, '$options': 'i' } });
-          if (requestdoc != null) {
-           // console.log('found if 2' + requestdoc);
-            found = !found;
-            movielink = requestdoc.url;
-            res.send({
-              sucess: true,
-              message: message,
-              isfound: movielink != null ? true : false,
-              mlink: movielink != null ? movielink : ''
-            })
-            return
+        // Read users.json file
+        let alldata=loaduser();
+          var m = 0;
+          for (m = 0; m < alldata.length; m++) {
+            if (search_word(req.body.mnm.toLowerCase().trim(), alldata[m].mnm.toLowerCase())) {
+              //console.log('found 1 contain'+alldata[m].url);
+              found = !found;
+              movielink = alldata[m].url;
+              let message = 'success';
+              res.send({
+                sucess: true,
+                message: message,
+                isfound: movielink != null ? true : false,
+                mlink: movielink != null ? movielink : ''
+              })
+              break;
+            }
           }
-        }
+      
       }
+     
     }
     else {
       res.send({
