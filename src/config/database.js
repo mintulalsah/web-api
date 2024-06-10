@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
-
+require('dotenv').config()
 main().then(res=> console.log("mongodb connected successfully...!!!"))
 main().catch(err => console.log(err));
 
 async function main() {
-  await mongoose.connect('mongodb+srv://mintu:mintu@serverlessinstance0.duup3.mongodb.net/chat');
+  console.log("process.env.MONGODB_URL",process.env.DEV_MONGODB_URL);
+  await mongoose.connect(process.env.DEV_MONGODB_URL);
 }
