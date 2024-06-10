@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
-require('dotenv').config()
-main().then(res=> console.log("mongodb connected successfully...!!!"))
+const dbHost = process.env.DB_HOST;
+main().then(res => console.log("mongodb connected successfully...!!!"))
 main().catch(err => console.log(err));
 
 async function main() {
-  console.log("process.env.MONGODB_URL",process.env.DEV_MONGODB_URL);
-  await mongoose.connect(process.env.DEV_MONGODB_URL);
+  await mongoose.connect(`mongodb://${dbHost}:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.2.5`);
 }
