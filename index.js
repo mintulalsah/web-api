@@ -12,7 +12,7 @@ const io = new Server(server, {
     origin: '*'
   }
 });
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 4000;
 
 const routes = require('./src/user/routes')
 require('./src/config/database')
