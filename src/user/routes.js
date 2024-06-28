@@ -218,6 +218,7 @@ router.post('/', async (req, res) => {
 // define the about route
 router.post('/sendmessage', async (req, res) => {
   let collectionModel;
+  console.log('body',req.body);
   const groupname = req.query.groupname;
    if(groupname==="g1"){
     collectionModel=groupones
@@ -230,14 +231,17 @@ router.post('/sendmessage', async (req, res) => {
     }
     
     if (!collectionModel) {
-      return res.status(400).json({ message: 'Invalid collection name' });
+      return res.status(400).json({ message: 'Invalid collection name1' });
     }
+
   try {
+    console.log('body',req.body);
     let response = await collectionModel.create(req.body)
     let movielink = null;
     let message = 'success';
     if (!req.body.isadmin) {
-      //console.log('chekcing');
+
+      console.log('chekcing');
       // checking user movie name exact match in document or not
       let requestdoc = await admin.findOne({ mnm: req.body.mnm.toLowerCase().trim() });
       var found = false;
@@ -313,6 +317,14 @@ router.post('/sendmessage', async (req, res) => {
               mlink: movielink != null ? movielink : ''
             })
             return
+          }
+          else{
+            res.send({
+              sucess: true,
+              message: message,
+              isfound: movielink != null ? true : false,
+              mlink: movielink != null ? movielink : ''
+            })
           }
         }
       }
