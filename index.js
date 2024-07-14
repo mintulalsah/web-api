@@ -3,7 +3,7 @@ var bodyParser = require('body-parser');
 const app = express();
 const http = require('http');
 const cors = require('cors');
-require('dotenv').config();
+// require('dotenv').config();
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 // const io = new Server(server);
@@ -13,6 +13,7 @@ const io = new Server(server, {
   }
 });
 const port = process.env.PORT || 4000;
+const host = process.env.API_HOST || '0.0.0.0';;
 
 const routes = require('./src/user/routes')
 require('./src/config/database')
@@ -27,14 +28,14 @@ app.use('/routes', routes)
 
 io.on('connection', (socket) => {
   console.log('a user connected');
-  socket.on('send_message', (data) => {
+  socket.on('send_message_v3', (data) => {
     console.log("received message in server side",data)
-    io.emit('received_message', data)
+    io.emit('received_message_v3', data)
   })
-  socket.on('send_message_v2', (data) => {
-    console.log("received message in server side",data)
-    io.emit('received_message_v2', data)
-  })
+  // socket.on('send_message_v2', (data) => {
+  //   console.log("received message in server side",data)
+  //   io.emit('received_message_v2', data)
+  // })
   socket.on('send_delete_message', (data) => {
     console.log("received message in server side",data)
     io.emit('receive_delete_message', data)
@@ -46,7 +47,6 @@ io.on('connection', (socket) => {
   });
 
 });
-
-server.listen(port, () => {
-  console.log( `Server running at http://localhost:${port}/`);
+server.listen(port, host, () => {
+  console.log(`Server running at http://${host}:${port}/`);
 });
