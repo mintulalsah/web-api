@@ -198,7 +198,7 @@ router.post('/sendmessage', async (req, res) => {
             if (search_word(req.body.mnm.toLowerCase().trim(), alldata[m].mnm.toLowerCase())) {
               //console.log('found 1 contain'+alldata[m].url);
               found = !found;
-              movielink = alldata[m].url;
+              movielink = alldata[m].link;
               let message = 'success';
               res.send({
                 sucess: true,
