@@ -130,95 +130,10 @@ router.get('/groups', async (req, res) => {
     })
   }
 })
-// define the about route
-router.post('/', async (req, res) => {
-  try {
-    let response = await grouptwos.create(req.body)
-    let movielink = null;
-    let message = 'success';
-    if (!req.body.isadmin) {
-      //console.log('chekcing');
-      // checking user movie name exact match in document or not
-      let requestdoc = await weblists.findOne({ mnm: req.body.mnm.toLowerCase().trim() });
-      var found = false;
-      if (requestdoc != null) {
-        //console.log('found if 0' + requestdoc);
-        found = !found;
-        movielink = requestdoc.url;
-        res.send({
-          sucess: true,
-          message: message,
-          isfound: movielink != null ? true : false,
-          mlink: movielink != null ? movielink : ''
-        })
-        return
-      }
-      // checking user moview name exist in document string(example if mnm is "love" and if in documemt mnm is love 2023 it will return true)
-     // console.log("still checking 1")
-      if (!found) {
-        requestdoc = await weblists.findOne({ mnm: { '$regex': req.body.mnm.toLowerCase().trim(), '$options': 'i' } });
-        if (requestdoc != null) {
-          //console.log('found if 1' + requestdoc);
-          found = !found;
-          movielink = requestdoc.url;
-          res.send({
-            sucess: true,
-            message: message,
-            isfound: movielink != null ? true : false,
-            mlink: movielink != null ? movielink : ''
-          })
-          return
-        }
-      }
-      //console.log("still checking contain logic")
-      if (!found) {
-        // Read users.json file
-        let alldata=loaduser();
-          var m = 0;
-          for (m = 0; m < alldata.length; m++) {
-            if (search_word(req.body.mnm.toLowerCase().trim(), alldata[m].mnm.toLowerCase())) {
-              //console.log('found 1 contain'+alldata[m].url);
-              found = !found;
-              movielink = alldata[m].url;
-              let message = 'success';
-              res.send({
-                sucess: true,
-                message: message,
-                isfound: movielink != null ? true : false,
-                mlink: movielink != null ? movielink : ''
-              })
-              break;
-            }
-          }
-      
-      }
-     
-    }
-    else {
-      res.send({
-        sucess: true,
-        message: message,
-        isfound: movielink != null ? true : false,
-        mlink: movielink != null ? movielink : ''
-      })
-    }
-
-  } catch (error) {
-    let type = error.type != undefined ? err.type : 'Bad Request';
-    let message = "Something went wrong"
-    res.send({
-      sucess: false,
-      error: type,
-      message: message
-    })
-  }
-})
-
 
 // define the about route
 router.post('/sendmessage', async (req, res) => {
   let collectionModel;
-  console.log('body',req.body);
   const groupname = req.query.groupname;
    if(groupname==="g1"){
     collectionModel=groupones
@@ -291,7 +206,7 @@ router.post('/sendmessage', async (req, res) => {
                 isfound: movielink != null ? true : false,
                 mlink: movielink != null ? movielink : ''
               })
-              break;
+              return;
             }
           }
       
@@ -316,14 +231,14 @@ router.post('/sendmessage', async (req, res) => {
               isfound: movielink != null ? true : false,
               mlink: movielink != null ? movielink : ''
             })
-            return
+           
           }
           else{
             res.send({
               sucess: true,
               message: message,
-              isfound: movielink != null ? true : false,
-              mlink: movielink != null ? movielink : ''
+              isfound: false,
+              mlink: "not found"
             })
           }
         }

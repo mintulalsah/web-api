@@ -32,10 +32,6 @@ io.on('connection', (socket) => {
     console.log("received message in server side",data)
     io.emit('received_message_v3', data)
   })
-  // socket.on('send_message_v2', (data) => {
-  //   console.log("received message in server side",data)
-  //   io.emit('received_message_v2', data)
-  // })
   socket.on('send_delete_message', (data) => {
     console.log("received message in server side",data)
     io.emit('receive_delete_message', data)

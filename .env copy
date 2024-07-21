@@ -1,0 +1,7 @@
+PORT=4000
+API_HOST=localhost
+DB_HOST=localhost
+DB_NAME=chat
+DB_USER=chatuserjungita
+DB_PASSWORD=Muski4567
+NODE_ENV=production
